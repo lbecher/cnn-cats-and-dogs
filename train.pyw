@@ -11,7 +11,7 @@ class_names = ["cats", "dogs"]
 dataset_dir = './dataset'
 height = 128
 width = 128
-batch_size = 64
+batch_size = 128
 
 # Carrega o dataset de treinamento
 training_images = tf.keras.preprocessing.image_dataset_from_directory(
