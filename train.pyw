@@ -3,7 +3,7 @@ from tensorflow.keras import layers, models
 import matplotlib.pyplot as plt
 import numpy as np
 
-epochs = 300
+epochs = 150
 
 # O dataset utilizado foi o Cat and Dog do Kaggle
 # https://www.kaggle.com/datasets/tongpython/cat-and-dog

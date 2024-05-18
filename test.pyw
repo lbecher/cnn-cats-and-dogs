@@ -80,12 +80,9 @@ class App:
 
             # Classificação usando o modelo carregado
             predicoes = self.modelo.predict(imagem_processada)
-            classe = np.argmax(predicoes)  # Obtém a classe prevista (0 para gato, 1 para cachorro)
-            confianca = round(np.max(predicoes) * 100.0)  # Obtém a confiança (probabilidade) da classe prevista
-
+            classe = np.argmax(predicoes)
             classes = ["gato", "cachorro"]
-
-            messagebox.showinfo("Reconhecimento", "Isso é um " + classes[classe] + ", confia! Tenho " + str(confianca) + "% de certeza!")
+            messagebox.showinfo("Reconhecimento", "Isso é um " + classes[classe] + ", confia! Tenho certeza absoluta!")
         else:
             messagebox.showerror("Erro", "Nenhuma imagem e/ou nenhum modelo foi aberto!")
 
