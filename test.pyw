@@ -68,7 +68,7 @@ class App:
             messagebox.showerror("Erro", "Nenhuma imagem foi aberta!")
     
     def processar_imagem(self):
-        imagem = image.load_img(self.imagem, target_size=(192, 192), color_mode='grayscale')
+        imagem = image.load_img(self.imagem, target_size=(128, 128), color_mode='grayscale')
         imagem_array = image.img_to_array(imagem)
         imagem_array = np.expand_dims(imagem_array, axis=0)  # Adiciona uma dimensão extra para o lote
         return imagem_array
