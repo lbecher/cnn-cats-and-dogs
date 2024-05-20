@@ -17,8 +17,8 @@ class App:
         # Barra de menu
         self.barra_de_menu = Menu(self.raiz)
         self.menu_de_arquivo = Menu(self.barra_de_menu, tearoff=0)
-        self.menu_de_arquivo.add_command(label="Abrir imagem...", command=self.abrir_imagem)
-        self.menu_de_arquivo.add_command(label="Abrir modelo...", command=self.abrir_modelo)
+        self.menu_de_arquivo.add_command(label="(1º) Abrir modelo...", command=self.abrir_modelo)
+        self.menu_de_arquivo.add_command(label="(2º) Abrir imagem...", command=self.abrir_imagem)
         self.menu_de_arquivo.add_separator()
         self.menu_de_arquivo.add_command(label="Fechar", command=self.fechar_aplicativo)
         self.barra_de_menu.add_cascade(label="Arquivo", menu=self.menu_de_arquivo)
@@ -70,7 +70,8 @@ class App:
     def processar_imagem(self):
         imagem = image.load_img(self.imagem, target_size=(128, 128), color_mode='grayscale')
         imagem_array = image.img_to_array(imagem)
-        imagem_array = np.expand_dims(imagem_array, axis=0)  # Adiciona uma dimensão extra para o lote
+        imagem_array = np.expand_dims(imagem_array, axis=0)
+        imagem_array = imagem_array / 255.0
         return imagem_array
     
     def classificar_imagem(self):
@@ -80,9 +81,15 @@ class App:
 
             # Classificação usando o modelo carregado
             predicoes = self.modelo.predict(imagem_processada)
-            classe = np.argmax(predicoes)
+            classe = int(np.argmax(predicoes, axis=-1))
+            porcentagens = predicoes[0]
+            porcentagens = porcentagens * 100
+
             classes = ["gato", "cachorro"]
-            messagebox.showinfo("Reconhecimento", "Isso é um " + classes[classe] + ", confia! Tenho certeza absoluta!")
+
+            mensagem = "Isso é um " + classes[classe] + ", confia! Tenho certeza absoluta!\n\n"
+            mensagem += f"Gato: {porcentagens[0]:.2f}%\nCachorro: {porcentagens[1]:.2f}%"
+            messagebox.showinfo("Reconhecimento", mensagem)          
         else:
             messagebox.showerror("Erro", "Nenhuma imagem e/ou nenhum modelo foi aberto!")
 
@@ -91,34 +98,3 @@ if __name__ == "__main__":
     raiz = Tk()
     app = App(raiz)
     raiz.mainloop()
-
-
-"""
-# Carregar o modelo salvo
-model_path = 'gatos_e_cachorros_25.keras'
-loaded_model = tf.keras.models.load_model(model_path)
-
-# Função para carregar e redimensionar uma imagem para o tamanho esperado pelo modelo
-def load_and_preprocess_image(image_path, target_size=(192, 192)):
-    img = image.load_img(image_path, target_size=target_size, color_mode='grayscale')
-    img_array = image.img_to_array(img)
-    img_array = np.expand_dims(img_array, axis=0)  # Adiciona uma dimensão extra para o lote
-    return img_array
-
-# Caminho da imagem a ser classificada (substitua pelo caminho da sua imagem)
-image_path = 'caminho/para/sua/imagem.jpg'
-
-# Carregar e pré-processar a imagem
-input_image = load_and_preprocess_image(image_path)
-
-# Classificação usando o modelo carregado
-predictions = loaded_model.predict(input_image)
-predicted_class = np.argmax(predictions)  # Obtém a classe prevista (0 para gato, 1 para cachorro)
-
-# Mapa de classes para rótulos
-class_names = ['gato', 'cachorro']
-
-# Resultado da classificação
-predicted_label = class_names[predicted_class]
-print("A imagem é classificada como:", predicted_label)
-"""

@@ -3,6 +3,7 @@ from tensorflow.keras import layers, models
 import matplotlib.pyplot as plt
 import numpy as np
 
+name = 'modelo_3x3_32_64_128_256_512_5x5'
 epochs = 200
 
 # O dataset utilizado foi o Cat and Dog do Kaggle
@@ -36,7 +37,7 @@ validation_images = tf.keras.preprocessing.image_dataset_from_directory(
 )
 
 # Visualiza algumas imagens do dataset
-plt.figure(figsize=(10,10))
+"""plt.figure(figsize=(10,10))
 for images, labels in training_images.take(1):  # Pega apenas o primeiro batch
     for i in range(3*5):
         plt.subplot(3,5,i+1)
@@ -45,7 +46,7 @@ for images, labels in training_images.take(1):  # Pega apenas o primeiro batch
         plt.grid(False)
         plt.imshow(tf.squeeze(images[i]), cmap='gray')  # Remove a dimensão do canal para visualização
         plt.xlabel(class_names[labels[i]])
-plt.show()
+plt.show()"""
 
 # Rede neural
 model = models.Sequential()
@@ -82,10 +83,10 @@ plt.plot(history.history['val_accuracy'], label='val_accuracy')
 plt.xlabel('Época')
 plt.ylim([0, 1])
 plt.legend(loc='lower right')
-plt.show()
+plt.savefig(name + '.png')
 
 test_loss, test_acc = model.evaluate(validation_images, verbose=2)
 print(test_acc)
 
 # Salva o modelo
-model.save('modelo.keras')
+model.save(name + '.keras')
